@@ -1,0 +1,75 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "A brand new API with no content.  Go nuts!",
+    "version" : "1.0.0",
+    "title" : "New API"
+  },
+  "paths" : {
+    "/eligibility_status" : { },
+    "/eligibility_determinations" : {
+      "get" : {
+        "summary" : "List All eligibility_determinations",
+        "description" : "Gets a list of all `eligibility_determination` entities.",
+        "operationId" : "geteligibility_determinations",
+        "parameters" : [ {
+          "name" : "ssn",
+          "in" : "query",
+          "description" : "ssn",
+          "required" : true
+        }, {
+          "name" : "dob",
+          "in" : "query",
+          "description" : "Date of Birth   ",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response - returns an array of `eligibility_determination` entities."
+          }
+        }
+      }
+    },
+    "/eligibility_determinations/{eligibility_determinationId}" : {
+      "get" : {
+        "summary" : "Get a eligibility_determination",
+        "description" : "Gets the details of a single instance of a `eligibility_determination`.",
+        "operationId" : "geteligibility_determination",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response - returns a single `eligibility_determination`."
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Update a eligibility_determination",
+        "description" : "Updates an existing `eligibility_determination`.",
+        "operationId" : "updateeligibility_determination",
+        "parameters" : [ ],
+        "responses" : {
+          "202" : {
+            "description" : "Successful response."
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete a eligibility_determination",
+        "description" : "Deletes an existing `eligibility_determination`.",
+        "operationId" : "deleteeligibility_determination",
+        "parameters" : [ ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful response."
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "eligibility_determinationId",
+        "in" : "path",
+        "description" : "A unique identifier for a `eligibility_determination`.",
+        "required" : true
+      } ]
+    }
+  }
+}

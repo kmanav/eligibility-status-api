@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camelContext id="context-aa8b58a6-935f-468b-a697-cd277b3adac5" xmlns="http://camel.apache.org/schema/spring">
+        <onException>
+            <exception>java.lang.Exception</exception>
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                <constant>500</constant>
+            </setHeader>
+            <setBody>
+                <simple>${exception.message}</simple>
+            </setBody>
+        </onException>
+        <rest enableCORS="true" id="rest-for-openapi-document" path="/">
+            <get id="openapi.json" produces="application/json" uri="openapi.json">
+                <description>Gets the OpenAPI document for this service</description>
+                <route id="route-for-openapi-document">
+                    <setHeader headerName="Exchange.CONTENT_TYPE" id="setHeader-for-openapi-document">
+                        <constant>application/vnd.oai.openapi+json</constant>
+                    </setHeader>
+                    <setBody id="setBody-for-openapi-document">
+                        <constant>resource:classpath:openapi.json</constant>
+                    </setBody>
+                </route>
+            </get>
+        </rest>
+        <rest bindingMode="json" enableCORS="true" id="restapi-id">
+            <get id="geteligibility_determination" uri="/eligibility_determinations/{eligibility_determinationId}">
+                <description>Gets the details of a single instance of a `eligibility_determination`.</description>
+                <to uri="direct:geteligibility_determination"/>
+            </get>
+        </rest>
+        <route id="id">
+            <from id="get_eligibility_status" uri="direct:geteligibility_determination"/>
+            <to id="_to1" uri="sql:SELECT id, first_name,last_name, date_of_birth,ssn,income,eligibility_status,employment_status FROM `mes-ncfast-simulation`.eligibility_check where active_indicator='Y' and ssn=:#eligibility_determinationId?dataSource=dataSource&amp;outputClass=com.redhat.mes.model.EligibilityStatusCheck&amp;outputType=StreamList"/>
+            <log id="_log1" message="${body}"/>
+        </route>
+    </camelContext>
+</beans>
